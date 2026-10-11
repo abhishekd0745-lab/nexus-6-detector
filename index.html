@@ -4,304 +4,368 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS 6 | News Intelligence</title>
+<meta name="theme-color" content="#ffffff">
+<title>NEXUS 6 | News Credibility Detector</title>
 <style>
 :root {
-  --bg:#080b14; --panel:#101625; --line:#253149;
-  --text:#edf3ff; --muted:#93a1ba; --cyan:#55e6ff;
-  --purple:#a58bff; --red:#ff657f; --green:#54e6a0;
-  --amber:#ffc66b;
+  --navy:#172554;
+  --blue:#315efb;
+  --purple:#7257e8;
+  --ink:#172033;
+  --muted:#68738a;
+  --line:#e7eaf1;
+  --bg:#f7f8fc;
+  --green:#16845b;
+  --amber:#b7791f;
+  --red:#c24141;
 }
 *{box-sizing:border-box}
 body{
- margin:0;background:radial-gradient(ellipse at 50% 0%,#182341 0%,var(--bg) 55%);
- color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.6;
 }
-header{
- display:flex;align-items:center;justify-content:space-between;gap:16px;
- padding:22px max(5%,calc((100% - 1120px)/2));border-bottom:1px solid var(--line);
- background:#080b14cc;flex-wrap:wrap
+button,textarea{font:inherit}
+.topbar{
+  background:#fff;border-bottom:1px solid var(--line);
+  padding:18px 6%;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;
 }
 .brand{display:flex;align-items:center;gap:12px}
 .logo{
- display:grid;place-items:center;width:43px;height:43px;border:1px solid var(--cyan);
- color:var(--cyan);border-radius:13px;font-weight:900;letter-spacing:-2px;
- box-shadow:0 0 22px #55e6ff20
+  width:43px;height:43px;border-radius:13px;
+  display:grid;place-items:center;color:#fff;font-weight:900;
+  background:linear-gradient(135deg,#315efb,#8064f5);
+  box-shadow:0 6px 18px #315efb30;
 }
-.brand h1{font-size:19px;letter-spacing:3px;margin:0}
-.brand p{font-size:10px;letter-spacing:2px;color:var(--muted);margin:5px 0 0}
-.status{font-size:11px;color:var(--green);border:1px solid #54e6a044;padding:9px 12px;border-radius:20px}
-main{width:min(1060px,90%);margin:42px auto 60px}
-.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:3px;font-weight:800}
+.brand h1{font-size:19px;letter-spacing:1px;margin:0}
+.brand p{margin:0;font-size:11px;color:var(--muted)}
+.status{
+  color:var(--green);background:#eaf8f1;border-radius:20px;
+  padding:7px 12px;font-size:12px;font-weight:700;
+}
+main{max-width:1100px;margin:0 auto;padding:42px 20px 60px}
 .hero{text-align:center;margin-bottom:30px}
-.hero h2{font-size:clamp(29px,5vw,48px);margin:14px 0 12px;letter-spacing:-1.5px}
-.hero h2 span{color:var(--cyan)}
-.hero p{color:var(--muted);max-width:630px;line-height:1.7;margin:auto;font-size:14px}
-.panel{
- background:linear-gradient(145deg,#121a2b,#0d1320);border:1px solid var(--line);
- border-radius:20px;padding:25px;box-shadow:0 18px 60px #0003
+.eyebrow{
+  color:var(--blue);font-weight:800;font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;
 }
-.panel-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
-.panel-head h3{margin:0;font-size:16px}
-.small{font-size:11px;color:var(--muted)}
+.hero h2{
+  font-size:clamp(30px,5vw,46px);line-height:1.15;
+  letter-spacing:-1.5px;margin:12px 0;
+}
+.gradient{
+  background:linear-gradient(90deg,#315efb,#8064f5);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:var(--muted);max-width:620px;margin:0 auto}
+.panel,.score-card,.explanation,.check-card{
+  background:#fff;border:1px solid var(--line);
+  border-radius:20px;box-shadow:0 8px 35px #1d2b4d08;
+}
+.panel{padding:25px}
+.panel-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.panel h3{margin:0;font-size:18px}
+.small{font-size:12px;color:var(--muted)}
 textarea{
- display:block;width:100%;min-height:190px;resize:vertical;background:#090e19;
- border:1px solid #293650;border-radius:13px;padding:18px;color:var(--text);
- font:14px/1.8 inherit;font-family:inherit;outline:none;transition:border .2s
+  display:block;width:100%;min-height:185px;resize:vertical;
+  margin-top:17px;padding:18px;border:1px solid #dfe4ee;
+  border-radius:13px;outline:none;background:#fcfcfe;color:var(--ink);
+  line-height:1.7;transition:.2s;
 }
-textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #55e6ff10}
-textarea::placeholder{color:#697791}
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #315efb15}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
 button{
- cursor:pointer;border:0;border-radius:10px;padding:13px 19px;font-weight:800;
- font-size:12px;letter-spacing:1px;transition:transform .2s,opacity .2s
+  border:0;border-radius:11px;padding:12px 18px;
+  cursor:pointer;font-weight:700;transition:transform .15s,opacity .15s;
 }
 button:hover{transform:translateY(-1px)}
-.primary{background:var(--cyan);color:#071019;flex:1;min-width:170px}
-.secondary{background:#1b263a;border:1px solid var(--line);color:var(--text)}
-#message{min-height:20px;font-size:12px;color:var(--amber);margin-top:12px}
-.results{margin-top:26px;display:none}
-.results.show{display:block;animation:rise .45s ease}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.result-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 16px}
-.result-title h3{margin:0;font-size:19px}
-.tag{font-size:10px;letter-spacing:1px;padding:7px 10px;border-radius:20px;background:#19283a;color:var(--cyan)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:21px;min-width:0}
-.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.card h4{margin:0 0 7px;font-size:14px}
-.card .desc{color:var(--muted);font-size:12px;line-height:1.6;margin:0}
-.score{font-size:30px;font-weight:800;white-space:nowrap;letter-spacing:-1px}
-.score.red{color:var(--red)}.score.purple{color:var(--purple)}.score.green{color:var(--green)}
-.track{height:8px;background:#253047;border-radius:20px;overflow:hidden;margin:19px 0 12px}
-.fill{height:100%;width:0;border-radius:20px;transition:width .8s ease}
-.fill.red{background:linear-gradient(90deg,#ff9a78,var(--red))}
-.fill.purple{background:linear-gradient(90deg,#6c9dff,var(--purple))}
-.fill.green{background:linear-gradient(90deg,#31bde2,var(--green))}
-.scale{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
-.explain{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
-.explain h5{margin:0 0 10px;font-size:11px;letter-spacing:1px;color:#c4cee0}
-.explain ul{margin:0;padding-left:18px;color:var(--muted);font-size:12px;line-height:1.8}
-.explain li{margin:4px 0}
-.explain .none{list-style:none;margin-left:-18px;color:var(--green)}
-.overview{margin-top:16px}
-.overview h4{margin:0 0 10px;font-size:14px}
-.overview p{font-size:12px;line-height:1.8;color:var(--muted);margin:0}
-.note{margin-top:16px;padding:14px 16px;border:1px solid #ffc66b40;background:#ffc66b08;border-radius:12px;color:#c4cee0;font-size:11px;line-height:1.8}
-.note strong{color:var(--amber)}
-footer{text-align:center;color:#75829b;font-size:10px;letter-spacing:1px;padding:0 15px 30px}
-@media(max-width:680px){
- main{margin-top:28px}.panel{padding:17px}.grid{grid-template-columns:1fr}
- .hero h2{letter-spacing:-.8px}.score{font-size:27px}
+.primary{color:white;background:linear-gradient(100deg,#315efb,#6248df)}
+.secondary{background:#f1f4fa;color:var(--navy)}
+.clear{background:#fff;border:1px solid var(--line);color:var(--muted)}
+.error{color:var(--red);font-size:13px;margin-top:10px}
+.results{margin-top:25px;display:none}
+.section-title{margin:32px 0 14px;font-size:21px;letter-spacing:-.4px}
+.scores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.score-card{padding:21px;min-width:0}
+.score-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.score-top h4{font-size:14px;margin:0;font-weight:750}
+.score-icon{
+  width:35px;height:35px;border-radius:11px;display:grid;place-items:center;
+  background:#eef2ff;color:var(--blue);font-weight:900;
+}
+.score-number{font-size:36px;font-weight:850;letter-spacing:-1.5px;margin:13px 0 3px}
+.score-desc{font-size:12px;color:var(--muted);min-height:38px}
+.track{height:7px;background:#edf0f6;border-radius:20px;overflow:hidden;margin-top:14px}
+.bar{height:100%;width:0;border-radius:20px;transition:width .5s}
+.blue{background:linear-gradient(90deg,#315efb,#8064f5)}
+.green{background:linear-gradient(90deg,#1b9c6c,#5ac99a)}
+.orange{background:linear-gradient(90deg,#e3a03c,#f2c56b)}
+.explanation{padding:24px;margin-top:18px}
+.explanation h3{margin:0 0 6px}
+.explanation-intro{color:var(--muted);font-size:14px;margin:0 0 15px}
+.finding{
+  display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line);
+}
+.finding-icon{
+  flex-shrink:0;width:29px;height:29px;border-radius:9px;
+  display:grid;place-items:center;background:#eef2ff;color:var(--blue);
+  font-weight:800;
+}
+.finding strong{display:block;font-size:14px;margin-bottom:3px}
+.finding p{margin:0;color:var(--muted);font-size:13px}
+.check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.check-card{padding:18px}
+.check-card h4{margin:0 0 6px;font-size:14px}
+.check-card p{margin:0;color:var(--muted);font-size:13px}
+.notice{
+  padding:15px 17px;border-radius:13px;background:#f0f4ff;
+  color:#344574;font-size:13px;margin-top:17px;
+}
+.fact-button{display:inline-block;margin-top:15px;text-decoration:none}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:22px;border-top:1px solid var(--line);background:#fff}
+@media(max-width:700px){
+  .topbar{padding:15px 5%}.status{display:none}
+  main{padding:30px 14px 45px}.panel{padding:17px}
+  .scores{grid-template-columns:1fr}
+  .score-card{padding:18px}
+  .score-desc{min-height:0}
+  .check-grid{grid-template-columns:1fr}
+  .hero h2{letter-spacing:-.7px}
 }
 </style>
 </head>
 <body>
-<header>
- <div class="brand">
-  <div class="logo">N6</div>
-  <div><h1>NEXUS 6</h1><p>NEWS INTELLIGENCE PLATFORM</p></div>
- </div>
- <div class="status">● ANALYSIS SYSTEM READY</div>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">N6</div>
+    <div>
+      <h1>NEXUS 6</h1>
+      <p>NEWS CREDIBILITY INTELLIGENCE</p>
+    </div>
+  </div>
+  <div class="status">● Analysis ready</div>
 </header>
 
 <main>
- <section class="hero">
-  <div class="eyebrow">INTELLIGENCE / 001</div>
-  <h2>Look beyond the <span>headline.</span></h2>
-  <p>Analyze news text for potential misinformation signals, sensational language and clickbait patterns.</p>
- </section>
+  <section class="hero">
+    <div class="eyebrow">Think clearly. Verify confidently.</div>
+    <h2>Is this news <span class="gradient">credible?</span></h2>
+    <p>Examine news text for credibility clues, sensational language, and verification gaps with NEXUS 6.</p>
+  </section>
 
- <section class="panel">
-  <div class="panel-head">
-   <h3>◈ Content analysis</h3>
-   <span class="small">TEXT-BASED SIGNAL CHECK</span>
-  </div>
-  <textarea id="news" maxlength="15000" placeholder="Paste a news headline or article here...
-
-Example: SHOCKING! Scientists reveal a secret that will change everything. Share this before it gets deleted!"></textarea>
-  <div class="actions">
-   <button class="primary" id="analyze">ANALYZE CONTENT →</button>
-   <button class="secondary" id="sample">TRY SAMPLE</button>
-   <button class="secondary" id="clear">CLEAR</button>
-  </div>
-  <div id="message" role="status" aria-live="polite"></div>
- </section>
-
- <section class="results" id="results" aria-live="polite">
-  <div class="result-title">
-   <h3>Analysis report</h3>
-   <span class="tag">SIGNAL-BASED ESTIMATE</span>
-  </div>
-
-  <div class="grid">
-   <article class="card">
-    <div class="card-top">
-     <div>
-      <h4>Potential misinformation signals</h4>
-      <p class="desc">How strongly the text matches selected warning patterns.</p>
-     </div>
-     <div class="score red" id="misScore">0%</div>
+  <section class="panel">
+    <div class="panel-head">
+      <h3>Analyze news or a claim</h3>
+      <span class="small">Text analysis</span>
     </div>
-    <div class="track"><div class="fill red" id="misBar"></div></div>
-    <div class="scale"><span>FEWER SIGNALS</span><span>MORE SIGNALS</span></div>
-    <div class="explain">
-     <h5>DETECTED SIGNALS</h5>
-     <ul id="misList"></ul>
+    <textarea id="news" maxlength="12000" placeholder="Paste a news article, headline, social media post, or claim here..."></textarea>
+    <div class="panel-head">
+      <span class="small" id="count">0 / 12000 characters</span>
+      <span class="small">English text works best</span>
     </div>
-   </article>
+    <div class="actions">
+      <button class="primary" id="analyze">Analyze content ↗</button>
+      <button class="secondary" id="sample">Try sample</button>
+      <button class="clear" id="clear">Clear</button>
+    </div>
+    <div id="error" class="error" role="alert"></div>
+  </section>
 
-   <article class="card">
-    <div class="card-top">
-     <div>
-      <h4>Clickbait signals</h4>
-      <p class="desc">Sensational wording, urgency and engagement-bait patterns.</p>
-     </div>
-     <div class="score purple" id="clickScore">0%</div>
+  <section class="results" id="results" aria-live="polite">
+    <h3 class="section-title">Your assessment</h3>
+    <div class="scores">
+      <article class="score-card">
+        <div class="score-top"><h4>Credibility assessment</h4><span class="score-icon">✓</span></div>
+        <div class="score-number" id="credNum">—%</div>
+        <div class="score-desc" id="credDesc">Assessment based on visible text patterns.</div>
+        <div class="track"><div class="bar blue" id="credBar"></div></div>
+      </article>
+      <article class="score-card">
+        <div class="score-top"><h4>Clickbait likelihood</h4><span class="score-icon">!</span></div>
+        <div class="score-number" id="clickNum">—%</div>
+        <div class="score-desc" id="clickDesc">Likelihood of sensational wording.</div>
+        <div class="track"><div class="bar orange" id="clickBar"></div></div>
+      </article>
+      <article class="score-card">
+        <div class="score-top"><h4>Evidence confidence</h4><span class="score-icon">◎</span></div>
+        <div class="score-number" id="evidenceNum">Limited</div>
+        <div class="score-desc" id="evidenceDesc">Text alone cannot verify a claim.</div>
+        <div class="track"><div class="bar green" id="evidenceBar"></div></div>
+      </article>
     </div>
-    <div class="track"><div class="fill purple" id="clickBar"></div></div>
-    <div class="scale"><span>FEWER SIGNALS</span><span>MORE SIGNALS</span></div>
-    <div class="explain">
-     <h5>DETECTED PHRASES</h5>
-     <ul id="clickList"></ul>
-    </div>
-   </article>
 
-   <article class="card">
-    <div class="card-top">
-     <div>
-      <h4>Low-warning signal index</h4>
-      <p class="desc">The complement of the misinformation signal score, not a truth probability.</p>
-     </div>
-     <div class="score green" id="lowScore">0%</div>
-    </div>
-    <div class="track"><div class="fill green" id="lowBar"></div></div>
-    <div class="scale"><span>LOWER</span><span>HIGHER</span></div>
-    <div class="explain">
-     <h5>HOW TO INTERPRET THIS</h5>
-     <ul id="lowList"></ul>
-    </div>
-   </article>
+    <section class="explanation">
+      <h3>AI-style explanation</h3>
+      <p class="explanation-intro" id="summary">Here's what the text analysis found.</p>
+      <div id="findings"></div>
+    </section>
 
-   <article class="card overview">
-    <h4>◈ Explanation</h4>
-    <p id="explanation"></p>
-    <div class="note"><strong>Verification needed:</strong> This tool examines wording only. It does not independently verify claims, authenticate sources, or consult live fact-checking databases.</div>
-   </article>
-  </div>
- </section>
+    <h3 class="section-title">Recommended verification steps</h3>
+    <div class="check-grid">
+      <article class="check-card">
+        <h4>01 — Find the original source</h4>
+        <p>Look for the original report, official announcement, research paper, or full interview.</p>
+      </article>
+      <article class="check-card">
+        <h4>02 — Check independent reporting</h4>
+        <p>Compare coverage from multiple reputable news organizations rather than reposts of one claim.</p>
+      </article>
+      <article class="check-card">
+        <h4>03 — Check dates and context</h4>
+        <p>Old stories, cropped images, and quotes taken out of context can mislead readers.</p>
+      </article>
+      <article class="check-card">
+        <h4>04 — Search existing fact-checks</h4>
+        <p>See whether professional fact-checkers have already investigated the exact claim.</p>
+        <a class="fact-button" href="https://toolbox.google.com/factcheck/explorer" target="_blank" rel="noopener noreferrer">Open Fact Check Explorer ↗</a>
+      </article>
+    </div>
+    <div class="notice">
+      <strong>Important:</strong> These percentages are heuristic estimates based on wording and text structure. They do not prove whether a claim is true or false. No live source verification or trained AI model is connected in this free prototype.
+    </div>
+  </section>
 </main>
-<footer>NEXUS 6 · RESPONSIBLE INFORMATION ANALYSIS · PROTOTYPE</footer>
+
+<footer>NEXUS 6 · Responsible information analysis · Prototype</footer>
 
 <script>
 const $ = id => document.getElementById(id);
-
-const misinformationPatterns = [
- ["unverified claim", /\b(secret cure|miracle cure|cure[s]? cancer overnight|instant cure)\b/gi, 18],
- ["conspiracy-style wording", /\b(they don't want you to know|cover[- ]?up|hidden truth|global conspiracy)\b/gi, 14],
- ["unsupported certainty", /\b(100% proven|guaranteed fact|undeniable proof|without any doubt)\b/gi, 12],
- ["rumour language", /\b(people are saying|rumou?red|unconfirmed reports|sources claim)\b/gi, 8],
- ["missing attribution", /\b(experts say|scientists say|officials say)\b/gi, 5],
- ["manipulative sharing request", /\b(share before it's deleted|share before they remove it)\b/gi, 12]
-];
+const news = $("news");
 
 const clickbaitPatterns = [
- ["sensational wording", /\b(shocking|unbelievable|mind[- ]blowing|jaw[- ]dropping|insane)\b/gi, 10],
- ["curiosity bait", /\b(you won't believe|what happened next|this is what happened|the reason will shock you)\b/gi, 16],
- ["false urgency or secrecy", /\b(secret|exposed|leaked|banned truth|before it's too late)\b/gi, 9],
- ["engagement bait", /\b(share this|click here|watch now|read this before|must see)\b/gi, 8],
- ["excessive punctuation", /[!?]{3,}/g, 7],
- ["excessive capital letters", /\b[A-Z]{5,}\b/g, 5]
+  {re:/\b(shocking|unbelievable|mind[- ]blowing|jaw[- ]dropping)\b/gi, label:"Sensational wording", why:"Sensational adjectives can be used to provoke a strong reaction rather than communicate evidence."},
+  {re:/\b(you won't believe|what happens next|the truth they hide|secret revealed)\b/gi, label:"Curiosity-gap phrases", why:"These phrases withhold key information to encourage clicks instead of explaining the claim directly."},
+  {re:/\b(share this now|share before deleted|spread the word immediately)\b/gi, label:"Urgent sharing language", why:"Pressure to share immediately can discourage readers from checking a claim first."},
+  {re:/!{2,}/g, label:"Repeated exclamation marks", why:"Repeated punctuation can signal an emotionally heightened headline, though it does not establish whether the claim is false."},
+  {re:/\b(100% guaranteed|proof they don't want you to see|everyone is lying)\b/gi, label:"Overconfident language", why:"Absolute or conspiratorial wording deserves scrutiny when no supporting evidence is supplied."}
 ];
 
-function inspect(text, patterns) {
- let score = 0;
- const findings = [];
- for (const [label, regex, weight] of patterns) {
-   regex.lastIndex = 0;
-   const matches = text.match(regex);
-   if (matches && matches.length) {
-     const contribution = Math.min(weight + (matches.length - 1) * 2, weight + 6);
-     score += contribution;
-     findings.push({
-       label,
-       phrase: [...new Set(matches.map(x => x.trim()))].slice(0, 3).join(", "),
-       count: matches.length
-     });
-   }
- }
- return {score: Math.min(100, score), findings};
+const cautionPatterns = [
+  {re:/\b(according to|reported by|published in|official statement|research paper|study found|data from)\b/gi, label:"Attribution language", why:"The text refers to a source or evidence. The original source still needs to be checked."},
+  {re:/\b(may|might|could|suggests|preliminary|early findings|not yet confirmed)\b/gi, label:"Uncertainty language", why:"The text signals uncertainty. That can be appropriate, but the underlying evidence and context matter."},
+  {re:/\b(always|never|everyone|nobody|all people|100% certain|guaranteed)\b/gi, label:"Absolute claims", why:"Broad absolute statements need strong, clearly stated evidence."},
+  {re:/\b(breaking|urgent|act now|before it's deleted|forward this)\b/gi, label:"Urgency cues", why:"Urgency can pressure readers to react before verifying information."},
+  {re:/https?:\/\/|www\./gi, label:"A web address is present", why:"A link provides a place to investigate, but its presence does not mean the source is trustworthy."},
+  {re:/\b(study|research|scientists|experts|officials)\b/gi, label:"Evidence-related references", why:"The text mentions research or authority, but the specific people, study, and findings must be verified."}
+];
+
+function matches(patterns, text) {
+  return patterns.map(p => {
+    const found = text.match(p.re) || [];
+    return { ...p, count: found.length };
+  }).filter(p => p.count > 0);
 }
 
-function renderList(id, findings, emptyMessage) {
- const list = $(id);
- list.replaceChildren();
- if (!findings.length) {
-   const li = document.createElement("li");
-   li.className = "none";
-   li.textContent = emptyMessage;
-   list.appendChild(li);
-   return;
- }
- findings.forEach(item => {
-   const li = document.createElement("li");
-   li.textContent = item.label + ": “" + item.phrase + "”";
-   list.appendChild(li);
- });
+function scoreText(text) {
+  const clickFindings = matches(clickbaitPatterns, text);
+  const cautionFindings = matches(cautionPatterns, text);
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  const wordCount = words.length;
+  const capsWords = (text.match(/\b[A-Z]{4,}\b/g) || []).length;
+  const questions = (text.match(/\?/g) || []).length;
+
+  let clickScore = 8;
+  clickFindings.forEach(f => clickScore += Math.min(20, f.count * 12));
+  clickScore += Math.min(15, questions * 3);
+  clickScore += Math.min(15, capsWords * 5);
+  clickScore = Math.min(96, clickScore);
+
+  let concernScore = 18;
+  concernScore += Math.min(25, clickFindings.length * 8);
+  concernScore += Math.min(20, capsWords * 4);
+  if (wordCount < 12) concernScore += 12;
+  if (!/\b(according to|reported by|source|study|research|data|evidence|official)\b/i.test(text)) concernScore += 10;
+  if (/\b(always|never|everyone|nobody|guaranteed|100% certain)\b/i.test(text)) concernScore += 12;
+  concernScore = Math.min(90, concernScore);
+
+  // A wording-based estimate, not a verified probability of truth.
+  const credibility = 100 - concernScore;
+
+  const evidencePoints = Math.min(100, cautionFindings.length * 20);
+  const evidenceLabel = evidencePoints >= 60 ? "Some clues" : evidencePoints >= 20 ? "Limited" : "Very limited";
+
+  return {credibility, clickScore, evidencePoints, evidenceLabel, clickFindings, cautionFindings, wordCount};
 }
 
-function setScore(id, barId, score) {
- $(id).textContent = score + "%";
- $(barId).style.width = score + "%";
+function addFinding(title, description, symbol="i") {
+  const item = document.createElement("div");
+  item.className = "finding";
+  const icon = document.createElement("div");
+  icon.className = "finding-icon";
+  icon.textContent = symbol;
+  const content = document.createElement("div");
+  const strong = document.createElement("strong");
+  strong.textContent = title;
+  const p = document.createElement("p");
+  p.textContent = description;
+  content.append(strong, p);
+  item.append(icon, content);
+  $("findings").append(item);
 }
 
 function analyze() {
- const text = $("news").value.trim();
- if (text.length < 20) {
-   $("message").textContent = "Please enter at least 20 characters for a useful signal check.";
-   $("results").classList.remove("show");
-   return;
- }
+  const text = news.value.trim();
+  $("error").textContent = "";
+  if (text.length < 20) {
+    $("error").textContent = "Please enter at least 20 characters for a more useful assessment.";
+    news.focus();
+    return;
+  }
 
- const mis = inspect(text, misinformationPatterns);
- const click = inspect(text, clickbaitPatterns);
- const low = 100 - mis.score;
+  const result = scoreText(text);
+  $("results").style.display = "block";
+  $("credNum").textContent = result.credibility + "%";
+  $("clickNum").textContent = result.clickScore + "%";
+  $("evidenceNum").textContent = result.evidenceLabel;
+  $("credDesc").textContent = result.credibility >= 75
+    ? "Fewer wording-based warning cues were detected."
+    : result.credibility >= 50
+      ? "Some wording-based warning cues were detected."
+      : "Several wording-based warning cues were detected.";
+  $("clickDesc").textContent = result.clickScore >= 60
+    ? "Many sensational wording patterns were detected."
+    : result.clickScore >= 30
+      ? "Some sensational wording patterns were detected."
+      : "Few common clickbait patterns were detected.";
+  $("evidenceDesc").textContent = "This measures text clues, not proof or source reliability.";
+  $("credBar").style.width = result.credibility + "%";
+  $("clickBar").style.width = result.clickScore + "%";
+  $("evidenceBar").style.width = result.evidencePoints + "%";
+  $("summary").textContent = `Reviewed ${result.wordCount} words and checked for common wording patterns. These findings describe the text, not the truth of the story.`;
+  $("findings").replaceChildren();
 
- setScore("misScore", "misBar", mis.score);
- setScore("clickScore", "clickBar", click.score);
- setScore("lowScore", "lowBar", low);
+  if (result.clickFindings.length === 0) {
+    addFinding("No common clickbait phrase detected", "The checked patterns did not find common sensational phrases. Misleading content can still use neutral language.", "✓");
+  } else {
+    result.clickFindings.forEach(f => addFinding(f.label, f.why, "!"));
+  }
 
- renderList("misList", mis.findings, "No matching warning phrases detected.");
- renderList("clickList", click.findings, "No matching clickbait phrases detected.");
+  if (result.cautionFindings.length === 0) {
+    addFinding("Evidence needs independent checking", "No clear source or evidence reference was detected by these simple rules. Check the original source and supporting documents.", "↗");
+  } else {
+    result.cautionFindings.forEach(f => addFinding(f.label, f.why, "i"));
+  }
 
- const notes = [];
- if (mis.findings.length) notes.push("The text contains " + mis.findings.length + " type(s) of wording associated with potential misinformation signals.");
- else notes.push("No phrases from this tool's limited misinformation warning list were found.");
- if (click.findings.length) notes.push("The text contains " + click.findings.length + " type(s) of clickbait signal.");
- else notes.push("No phrases from this tool's limited clickbait list were found.");
- if (text.length < 100) notes.push("The input is short, so there is limited context for analysis.");
- notes.push("These scores reflect preset text patterns only. Reliable verification requires checking the original source and independent evidence.");
- $("explanation").textContent = notes.join(" ");
-
- $("message").textContent = "Analysis complete · " + text.length + " characters checked.";
- $("results").classList.remove("show");
- void $("results").offsetWidth;
- $("results").classList.add("show");
+  addFinding("What this score means", "The credibility percentage is a rough wording-based indicator, not a probability that the news is true. Confirm important claims with reliable independent sources.", "✓");
+  $("results").scrollIntoView({behavior:"smooth", block:"start"});
 }
 
+news.addEventListener("input", () => {
+  $("count").textContent = news.value.length + " / 12000 characters";
+});
 $("analyze").addEventListener("click", analyze);
 $("sample").addEventListener("click", () => {
- $("news").value = "SHOCKING!!! You won't believe this secret cure. Experts say this miracle cure works overnight. Share this before it's deleted!";
- $("message").textContent = "Sample loaded. Click ANALYZE CONTENT to test it.";
+  news.value = "SHOCKING! You won't believe this secret discovery! Officials say a new study may show early results, but researchers have not yet confirmed the claim. Read the original report and check independent sources before sharing.";
+  $("count").textContent = news.value.length + " / 12000 characters";
+  analyze();
 });
 $("clear").addEventListener("click", () => {
- $("news").value = "";
- $("message").textContent = "";
- $("results").classList.remove("show");
- $("misScore").textContent = "0%";
- $("clickScore").textContent = "0%";
- $("lowScore").textContent = "0%";
- ["misBar","clickBar","lowBar"].forEach(id => $(id).style.width = "0%");
+  news.value = "";
+  $("count").textContent = "0 / 12000 characters";
+  $("error").textContent = "";
+  $("results").style.display = "none";
+  news.focus();
 });
 </script>
 </body>
