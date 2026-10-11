@@ -4,356 +4,543 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NEXUS 6 | AI Fake News & Clickbait Detector</title>
+<title>NEXUS 6 | News Intelligence</title>
+
+<meta name="description" content="NEXUS 6 analyzes news content for misleading patterns and clickbait signals.">
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg: #080d19;
-  --card: #111a2c;
-  --border: #263650;
-  --text: #f2f6ff;
-  --muted: #9aabc4;
-  --blue: #68a9ff;
-  --green: #38d9a5;
-  --red: #ff657d;
-  --purple: #b49aff;
+    --bg: #070b14;
+    --panel: #101725;
+    --panel2: #0c1320;
+    --border: rgba(148, 163, 184, .15);
+    --text: #f2f6ff;
+    --muted: #8b9bb4;
+    --cyan: #4de8ff;
+    --blue: #6685ff;
+    --purple: #a78bfa;
+    --green: #43e6a0;
+    --yellow: #ffd166;
+    --red: #ff7185;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background:
-    radial-gradient(ellipse at top, #18294b, transparent 55%),
-    var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 15% 0%, rgba(48, 91, 180, .16), transparent 40%),
+        radial-gradient(ellipse at 90% 30%, rgba(117, 65, 204, .12), transparent 35%),
+        var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
 }
 
+button, textarea {
+    font: inherit;
+}
+
+.container {
+    width: min(1120px, 92%);
+    margin: auto;
+}
+
+/* HEADER */
+
 header {
-  padding: 23px 7%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(7, 11, 20, .82);
+    backdrop-filter: blur(18px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav {
+    min-height: 78px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .logo {
-  font-size: 27px;
-  font-weight: 900;
-  letter-spacing: 3px;
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+    font-weight: 800;
+    color: #07111b;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    box-shadow: 0 0 28px rgba(77, 232, 255, .17);
 }
 
-.logo span {
-  color: var(--blue);
+.brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 2px;
 }
 
-.header-label {
-  color: var(--green);
-  font-size: 11px;
-  letter-spacing: 1px;
+.brand-sub {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2.2px;
+    margin-top: 4px;
 }
 
-main {
-  width: min(1000px, 92%);
-  margin: 55px auto;
+.status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 30px;
+    color: #b8c8df;
+    font-size: 11px;
+    letter-spacing: 1px;
 }
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--green);
+}
+
+/* HERO */
 
 .hero {
-  text-align: center;
-  margin-bottom: 35px;
+    text-align: center;
+    padding: 76px 0 42px;
 }
 
-.tag {
-  display: inline-block;
-  padding: 9px 15px;
-  border: 1px solid #30496e;
-  border-radius: 30px;
-  background: #14233c;
-  color: var(--blue);
-  font-size: 11px;
-  letter-spacing: 1.5px;
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--cyan);
+    background: rgba(77, 232, 255, .06);
+    border: 1px solid rgba(77, 232, 255, .16);
+    border-radius: 30px;
+    padding: 9px 15px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
 }
 
-h1 {
-  font-size: clamp(30px, 5vw, 48px);
-  line-height: 1.2;
-  margin: 23px 0 15px;
+.hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(37px, 6vw, 65px);
+    line-height: 1.08;
+    letter-spacing: -2.5px;
+    margin: 26px auto 18px;
+    max-width: 850px;
 }
 
-h1 span {
-  color: var(--blue);
+.gradient-text {
+    background: linear-gradient(90deg, var(--cyan), #a2b4ff, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
-.subtitle {
-  color: var(--muted);
-  line-height: 1.8;
-  max-width: 650px;
-  margin: auto;
-  font-size: 14px;
+.hero p {
+    max-width: 600px;
+    margin: auto;
+    line-height: 1.8;
+    font-size: 14px;
+    color: var(--muted);
 }
 
-.panel {
-  background: linear-gradient(145deg, #141f34, #0e1727);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 27px;
-  box-shadow: 0 20px 60px #0003;
+/* ANALYSIS INPUT */
+
+.analyzer {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 26px;
+    border: 1px solid rgba(126, 157, 204, .2);
+    border-radius: 23px;
+    background: linear-gradient(145deg, rgba(19, 29, 47, .96), rgba(10, 16, 28, .97));
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .24);
 }
 
-.panel h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
+.input-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
 }
 
-.panel-description {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-  margin-bottom: 17px;
+.input-heading label {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.input-heading span {
+    font-size: 10px;
+    color: var(--muted);
 }
 
 textarea {
-  width: 100%;
-  min-height: 220px;
-  padding: 18px;
-  background: #080f1d;
-  border: 1px solid #30435f;
-  border-radius: 13px;
-  color: white;
-  font: inherit;
-  font-size: 14px;
-  line-height: 1.8;
-  resize: vertical;
-  outline: none;
+    width: 100%;
+    min-height: 175px;
+    resize: vertical;
+    background: rgba(5, 10, 19, .8);
+    color: var(--text);
+    border: 1px solid rgba(130, 154, 190, .2);
+    border-radius: 15px;
+    outline: none;
+    padding: 20px;
+    line-height: 1.8;
+    font-size: 14px;
+    transition: border .2s, box-shadow .2s;
+}
+
+textarea::placeholder {
+    color: #65758e;
 }
 
 textarea:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px #68a9ff18;
+    border-color: rgba(77, 232, 255, .65);
+    box-shadow: 0 0 0 3px rgba(77, 232, 255, .07);
 }
 
-.counter {
-  color: var(--muted);
-  text-align: right;
-  font-size: 11px;
-  margin-top: 9px;
+.input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
 }
 
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  padding: 15px 20px;
-  font-size: 13px;
-  font-weight: 800;
-  transition: .2s;
+.input-hint {
+    color: var(--muted);
+    font-size: 11px;
 }
 
-button:hover {
-  transform: translateY(-2px);
+.analyze-btn {
+    border: 0;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 15px 23px;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: .8px;
+    color: #06101b;
+    background: linear-gradient(100deg, var(--cyan), #93a9ff);
+    box-shadow: 0 7px 26px rgba(77, 232, 255, .14);
+    transition: transform .2s, box-shadow .2s;
 }
 
-.analyze {
-  width: 100%;
-  margin-top: 20px;
-  background: linear-gradient(100deg, #68a9ff, #9ac9ff);
-  color: #07101e;
+.analyze-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(77, 232, 255, .25);
 }
 
-.examples {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 15px;
+.analyze-btn:disabled {
+    cursor: wait;
+    opacity: .7;
+    transform: none;
 }
 
-.secondary {
-  background: #202e45;
-  border: 1px solid #344763;
-  color: white;
-  font-size: 11px;
-  padding: 11px 14px;
+.error {
+    display: none;
+    color: var(--red);
+    font-size: 12px;
+    margin-top: 14px;
 }
+
+/* RESULTS */
 
 .results {
-  display: none;
-  margin-top: 25px;
+    display: none;
+    padding: 58px 0 25px;
+    animation: appear .5s ease;
 }
 
-.results-heading {
-  margin-bottom: 23px;
+@keyframes appear {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.results-heading h2 {
-  font-size: 23px;
-  margin-bottom: 9px;
+.section-top {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.results-heading p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
+.section-top .mini {
+    color: var(--cyan);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.section-top h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(26px, 4vw, 37px);
+    margin: 12px 0;
+}
+
+.section-top p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
 }
 
 .result-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
 }
 
 .result-card {
-  background: #0a1221;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 21px;
+    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(17, 26, 42, .96), rgba(10, 16, 28, .96));
 }
 
-.result-card h3 {
-  font-size: 16px;
-  margin-bottom: 15px;
+.card-top {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 25px;
 }
 
-.badge {
-  display: inline-block;
-  border-radius: 30px;
-  padding: 9px 12px;
-  font-size: 11px;
-  font-weight: 800;
-  margin-bottom: 20px;
+.card-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    font-size: 20px;
+    background: rgba(77, 232, 255, .08);
+    border: 1px solid rgba(77, 232, 255, .15);
 }
 
-.good {
-  color: var(--green);
-  background: #123c35;
+.card-top h3 {
+    font-size: 15px;
+    margin-bottom: 5px;
 }
 
-.bad {
-  color: var(--red);
-  background: #431e2b;
+.card-top p {
+    color: var(--muted);
+    font-size: 11px;
 }
 
-.neutral {
-  color: var(--blue);
-  background: #172d4c;
+.score-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 13px;
 }
 
-.purple {
-  color: var(--purple);
-  background: #30264c;
+.score-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -2px;
 }
 
-.metric {
-  margin-bottom: 19px;
+.score-number small {
+    font-size: 20px;
+    letter-spacing: 0;
 }
 
-.metric-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 12px;
-  margin-bottom: 9px;
+.score-caption {
+    color: var(--muted);
+    font-size: 10px;
+    text-align: right;
+    line-height: 1.6;
 }
 
-.metric-top span:first-child {
-  color: var(--muted);
+.meter {
+    width: 100%;
+    height: 8px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #202b3d;
+    margin-bottom: 16px;
 }
 
-.bar {
-  height: 8px;
-  border-radius: 20px;
-  background: #27344b;
-  overflow: hidden;
+.meter-fill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    transition: width .8s ease;
 }
 
-.fill {
-  height: 100%;
-  width: 0;
-  border-radius: 20px;
-  transition: width .6s;
+.fake-fill {
+    background: linear-gradient(90deg, #4de8ff, #6685ff);
 }
 
-.green-fill {
-  background: var(--green);
+.click-fill {
+    background: linear-gradient(90deg, #a78bfa, #ff82bd);
 }
 
-.red-fill {
-  background: var(--red);
+.verdict {
+    display: inline-block;
+    padding: 8px 11px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    background: rgba(148, 163, 184, .1);
+    border: 1px solid var(--border);
+    margin-bottom: 17px;
 }
 
-.blue-fill {
-  background: var(--blue);
-}
-
-.purple-fill {
-  background: var(--purple);
+.explanation-title {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 9px;
 }
 
 .explanation {
-  margin-top: 18px;
-  padding: 17px;
-  background: #101a2b;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+    font-size: 12px;
+    color: #9aabc2;
+    line-height: 1.9;
+    min-height: 68px;
+    overflow-wrap: anywhere;
 }
 
-.explanation h4 {
-  font-size: 13px;
-  margin-bottom: 10px;
+.signals {
+    margin-top: 20px;
+    padding-top: 17px;
+    border-top: 1px solid var(--border);
 }
 
-.explanation p {
-  font-size: 12px;
-  color: #b4c3d9;
-  line-height: 1.9;
-  overflow-wrap: anywhere;
+.signals h4 {
+    font-size: 10px;
+    color: #c2cfe2;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
 }
 
-.new-analysis {
-  width: 100%;
-  margin-top: 20px;
+.signal-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.signal-tag {
+    font-size: 10px;
+    color: #aebdd2;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 7px 9px;
+    background: rgba(148, 163, 184, .04);
+}
+
+.no-signals {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* OVERALL SUMMARY */
+
+.summary {
+    display: none;
+    margin-top: 22px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    padding: 22px;
+    background: rgba(16, 23, 37, .8);
+}
+
+.summary h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.summary p {
+    font-size: 12px;
+    line-height: 1.9;
+    color: #9aabc2;
+}
+
+.disclaimer {
+    margin: 24px auto 0;
+    max-width: 850px;
+    color: #74849d;
+    font-size: 10px;
+    text-align: center;
+    line-height: 1.9;
 }
 
 footer {
-  text-align: center;
-  padding: 30px 15px;
-  color: #7789a4;
-  font-size: 11px;
-  line-height: 1.9;
+    border-top: 1px solid var(--border);
+    margin-top: 70px;
+    padding: 25px 0;
+    text-align: center;
+    color: #66758d;
+    font-size: 10px;
+    letter-spacing: .5px;
 }
 
-@media (max-width: 650px) {
-  header {
-    padding: 20px 5%;
-  }
+footer strong {
+    color: #a6b5cb;
+    letter-spacing: 2px;
+}
 
-  .logo {
-    font-size: 22px;
-  }
+@media (max-width: 700px) {
+    .hero {
+        padding-top: 52px;
+    }
 
-  .header-label {
-    font-size: 9px;
-  }
+    .hero h1 {
+        letter-spacing: -1.5px;
+    }
 
-  main {
-    margin: 35px auto;
-  }
+    .analyzer {
+        padding: 17px;
+    }
 
-  .panel {
-    padding: 19px;
-  }
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
 
-  .result-grid {
-    grid-template-columns: 1fr;
-  }
+    .result-card {
+        padding: 21px;
+    }
 
-  textarea {
-    min-height: 190px;
-  }
+    .status {
+        font-size: 9px;
+        padding: 9px;
+    }
+
+    .brand-name {
+        font-size: 18px;
+    }
+
+    .input-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .analyze-btn {
+        width: 100%;
+    }
 }
 </style>
 </head>
@@ -361,365 +548,495 @@ footer {
 <body>
 
 <header>
-  <div class="logo">NEXUS <span>6</span></div>
-  <div class="header-label">CONTENT INTELLIGENCE</div>
+    <div class="container nav">
+        <div class="brand">
+            <div class="logo">N6</div>
+            <div>
+                <div class="brand-name">NEXUS 6</div>
+                <div class="brand-sub">NEWS INTELLIGENCE</div>
+            </div>
+        </div>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            ANALYSIS SYSTEM
+        </div>
+    </div>
 </header>
 
-<main>
+<main class="container">
 
-<section class="hero">
-  <div class="tag">AI-POWERED CONTENT ANALYSIS</div>
+    <section class="hero">
+        <div class="eyebrow">✦ INTELLIGENT CONTENT ANALYSIS</div>
 
-  <h1>
-    Fake News &<br>
-    <span>Clickbait Detector</span>
-  </h1>
+        <h1>
+            See beyond<br>
+            <span class="gradient-text">the headline.</span>
+        </h1>
 
-  <p class="subtitle">
-    Analyze news articles and headlines in one place.
-    Examine credibility signals and detect clickbait patterns
-    with one simple analysis.
-  </p>
-</section>
+        <p>
+            Analyze news content for suspicious language, misleading
+            patterns and clickbait signals — all in one place.
+        </p>
+    </section>
 
-<section class="panel">
-  <h2>🔎 Analyze Your Content</h2>
-
-  <p class="panel-description">
-    Paste a news article, news headline, or both.
-    NEXUS 6 will examine the same text for fake-news risk
-    and clickbait patterns.
-  </p>
-
-  <textarea
-    id="content"
-    placeholder="Paste your news article or headline here..."
-    aria-label="News article or headline"
-  ></textarea>
-
-  <div class="counter" id="counter">0 characters</div>
-
-  <button class="analyze" onclick="analyzeContent()">
-    ANALYZE CONTENT →
-  </button>
-
-  <div class="examples">
-    <button class="secondary" onclick="loadExample()">
-      TRY EXAMPLE
-    </button>
-
-    <button class="secondary" onclick="clearContent()">
-      CLEAR TEXT
-    </button>
-  </div>
-</section>
-
-<section class="panel results" id="results">
-
-  <div class="results-heading">
-    <h2>Analysis Dashboard</h2>
-    <p>
-      Both detection results below come from the same submitted content.
-    </p>
-  </div>
-
-  <div class="result-grid">
-
-    <div class="result-card">
-      <h3>📰 Fake News Detection</h3>
-
-      <div id="newsBadge" class="badge neutral">
-        ANALYSIS RESULT
-      </div>
-
-      <div class="metric">
-        <div class="metric-top">
-          <span>Real News Score</span>
-          <strong id="realValue">0%</strong>
+    <section class="analyzer">
+        <div class="input-heading">
+            <label for="content">CONTENT ANALYZER</label>
+            <span>HEADLINE OR FULL ARTICLE</span>
         </div>
-        <div class="bar">
-          <div id="realBar" class="fill green-fill"></div>
+
+        <textarea
+            id="content"
+            maxlength="15000"
+            placeholder="Paste your news headline or article here. NEXUS 6 will analyze the same text for fake-news signals and clickbait patterns..."
+            aria-label="Paste news headline or article"
+        ></textarea>
+
+        <div class="input-footer">
+            <span class="input-hint" id="charCount">0 / 15000 characters</span>
+
+            <button class="analyze-btn" id="analyzeBtn" type="button">
+                ANALYZE CONTENT&nbsp; →
+            </button>
         </div>
-      </div>
 
-      <div class="metric">
-        <div class="metric-top">
-          <span>Fake News Risk</span>
-          <strong id="fakeValue">0%</strong>
+        <div class="error" id="error" role="alert">
+            Please paste a headline or article before analyzing.
         </div>
-        <div class="bar">
-          <div id="fakeBar" class="fill red-fill"></div>
+    </section>
+
+    <section class="results" id="results">
+
+        <div class="section-top">
+            <div class="mini">NEXUS 6 / ANALYSIS REPORT</div>
+            <h2>Your Content Intelligence Report</h2>
+            <p>
+                Both detection systems have analyzed the same submitted text.
+                Review the scores, signals and explanations below.
+            </p>
         </div>
-      </div>
 
-      <div class="explanation">
-        <h4>🤖 News Analysis</h4>
-        <p id="newsExplanation"></p>
-      </div>
-    </div>
+        <div class="result-grid">
 
-    <div class="result-card">
-      <h3>🎯 Clickbait Detection</h3>
+            <!-- FAKE NEWS DETECTION -->
 
-      <div id="clickBadge" class="badge neutral">
-        ANALYSIS RESULT
-      </div>
+            <article class="result-card">
+                <div class="card-top">
+                    <div class="card-icon">◈</div>
+                    <div>
+                        <h3>Fake News Signals</h3>
+                        <p>Suspicious language pattern analysis</p>
+                    </div>
+                </div>
 
-      <div class="metric">
-        <div class="metric-top">
-          <span>Not Clickbait Score</span>
-          <strong id="normalValue">0%</strong>
+                <div class="score-row">
+                    <div class="score-number" id="fakeScore">0<small>%</small></div>
+                    <div class="score-caption">
+                        SUSPICIOUS<br>LANGUAGE SCORE
+                    </div>
+                </div>
+
+                <div class="meter">
+                    <div class="meter-fill fake-fill" id="fakeBar"></div>
+                </div>
+
+                <div class="verdict" id="fakeVerdict">AWAITING ANALYSIS</div>
+
+                <div class="explanation-title">Analysis Explanation</div>
+                <p class="explanation" id="fakeExplanation"></p>
+
+                <div class="signals">
+                    <h4>DETECTED SIGNALS</h4>
+                    <div class="signal-list" id="fakeSignals"></div>
+                </div>
+            </article>
+
+            <!-- CLICKBAIT DETECTION -->
+
+            <article class="result-card">
+                <div class="card-top">
+                    <div class="card-icon">⌁</div>
+                    <div>
+                        <h3>Clickbait Detection</h3>
+                        <p>Headline manipulation pattern analysis</p>
+                    </div>
+                </div>
+
+                <div class="score-row">
+                    <div class="score-number" id="clickScore">0<small>%</small></div>
+                    <div class="score-caption">
+                        CLICKBAIT<br>SIGNAL SCORE
+                    </div>
+                </div>
+
+                <div class="meter">
+                    <div class="meter-fill click-fill" id="clickBar"></div>
+                </div>
+
+                <div class="verdict" id="clickVerdict">AWAITING ANALYSIS</div>
+
+                <div class="explanation-title">Analysis Explanation</div>
+                <p class="explanation" id="clickExplanation"></p>
+
+                <div class="signals">
+                    <h4>DETECTED SIGNALS</h4>
+                    <div class="signal-list" id="clickSignals"></div>
+                </div>
+            </article>
+
         </div>
-        <div class="bar">
-          <div id="normalBar" class="fill blue-fill"></div>
+
+        <div class="summary" id="summary">
+            <h3>◈ Combined Intelligence Summary</h3>
+            <p id="summaryText"></p>
         </div>
-      </div>
 
-      <div class="metric">
-        <div class="metric-top">
-          <span>Clickbait Risk</span>
-          <strong id="clickValue">0%</strong>
-        </div>
-        <div class="bar">
-          <div id="clickBar" class="fill purple-fill"></div>
-        </div>
-      </div>
+        <p class="disclaimer">
+            Scores indicate detected text patterns, not verified probabilities
+            that a story is true or false. This browser-based analysis does not
+            independently verify claims, sources or events. Always cross-check
+            important news with reliable, independent sources.
+        </p>
 
-      <div class="explanation">
-        <h4>🎯 Headline Analysis</h4>
-        <p id="clickExplanation"></p>
-      </div>
-    </div>
-
-  </div>
-
-  <button class="secondary new-analysis" onclick="clearContent()">
-    ← ANALYZE NEW CONTENT
-  </button>
-
-</section>
+    </section>
 
 </main>
 
 <footer>
-  NEXUS 6 · FAKE NEWS & CLICKBAIT DETECTOR<br>
-  Intelligent content analysis platform
+    <strong>NEXUS 6</strong>
+    &nbsp;·&nbsp; NEWS INTELLIGENCE PLATFORM
+    <br><br>
+    Built for smarter, more responsible news evaluation.
 </footer>
 
 <script>
-const content = document.getElementById("content");
+const contentInput = document.getElementById("content");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const errorBox = document.getElementById("error");
 
-content.addEventListener("input", function() {
-  document.getElementById("counter").textContent =
-    content.value.length + " characters";
+contentInput.addEventListener("input", () => {
+    document.getElementById("charCount").textContent =
+        contentInput.value.length + " / 15000 characters";
+
+    errorBox.style.display = "none";
 });
 
-function loadExample() {
-  content.value =
-    "SHOCKING! You won't believe what happened next! " +
-    "A new study reportedly found a 40% increase in local traffic. " +
-    "According to the city transport report published in 2025, " +
-    "officials are reviewing the results and planning further research.";
+analyzeBtn.addEventListener("click", analyzeContent);
 
-  document.getElementById("counter").textContent =
-    content.value.length + " characters";
-}
+function findMatches(text, patterns) {
+    const found = [];
 
-function clearContent() {
-  content.value = "";
-  document.getElementById("counter").textContent = "0 characters";
-  document.getElementById("results").style.display = "none";
-  content.focus();
-}
+    for (const item of patterns) {
+        if (item.pattern.test(text)) {
+            found.push(item.label);
+        }
+    }
 
-function setScore(valueId, barId, value) {
-  document.getElementById(valueId).textContent = value + "%";
-  document.getElementById(barId).style.width = value + "%";
-}
-
-function setBadge(id, text, className) {
-  const badge = document.getElementById(id);
-  badge.textContent = text;
-  badge.className = "badge " + className;
+    return found;
 }
 
 function analyzeContent() {
-  const text = content.value.trim();
+    const text = contentInput.value.trim();
 
-  if (text.length < 10) {
-    alert("Please enter a news article or headline with at least 10 characters.");
-    return;
-  }
-
-  const t = text.toLowerCase();
-  const newsReasons = [];
-  const clickReasons = [];
-
-  // Fake-news risk is assessed using visible text patterns.
-  let fakeRisk = 30;
-
-  const misleadingPhrases = [
-    "they don't want you to know",
-    "share before deleted",
-    "secret cure",
-    "doctors hate this",
-    "government hiding",
-    "mainstream media won't tell",
-    "100% guaranteed",
-    "forward to everyone",
-    "miracle cure"
-  ];
-
-  const sensationalPhrases = [
-    "shocking",
-    "you won't believe",
-    "unbelievable",
-    "mind-blowing",
-    "exposed",
-    "secret revealed",
-    "what happened next",
-    "will blow your mind",
-    "change your life",
-    "insane discovery",
-    "must see"
-  ];
-
-  for (const phrase of misleadingPhrases) {
-    if (t.includes(phrase)) {
-      fakeRisk += 12;
-      newsReasons.push("Potentially misleading wording: \"" + phrase + "\".");
+    if (!text) {
+        errorBox.style.display = "block";
+        contentInput.focus();
+        return;
     }
-  }
 
-  if (/\b(fake|hoax|fabricated|made-up)\b/i.test(text)) {
-    fakeRisk += 8;
-    newsReasons.push("The text uses terms associated with false claims.");
-  }
+    errorBox.style.display = "none";
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = "ANALYZING CONTENT...";
 
-  if (/\b(always|never|everyone knows|100% true)\b/i.test(text)) {
-    fakeRisk += 5;
-    newsReasons.push("Absolute claims appear and may need additional evidence.");
-  }
+    // Brief visual transition before displaying results.
+    setTimeout(() => {
+        const fake = analyzeFakeNews(text);
+        const click = analyzeClickbait(text);
 
-  if (/\b(according to|official report|researchers|published study|source:|statement from)\b/i.test(text)) {
-    fakeRisk -= 8;
-    newsReasons.push("A report, study, or source is mentioned and should be independently checked.");
-  }
+        showResult(
+            "fake",
+            fake.score,
+            fake.verdict,
+            fake.explanation,
+            fake.signals
+        );
 
-  if (/\b(19|20)\d{2}\b/.test(text)) {
-    newsReasons.push("A year is mentioned; check the publication date and context.");
-  }
+        showResult(
+            "click",
+            click.score,
+            click.verdict,
+            click.explanation,
+            click.signals
+        );
 
-  if (text.split(/\s+/).length < 25) {
-    newsReasons.push("The text is short, so there may not be enough context to evaluate its claims.");
-  }
+        document.getElementById("summaryText").textContent =
+            makeSummary(fake, click);
 
-  fakeRisk = Math.max(5, Math.min(95, fakeRisk));
-  const realScore = 100 - fakeRisk;
+        document.getElementById("results").style.display = "block";
+        document.getElementById("summary").style.display = "block";
 
-  setScore("realValue", "realBar", realScore);
-  setScore("fakeValue", "fakeBar", fakeRisk);
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = "ANALYZE AGAIN &nbsp; →";
 
-  if (fakeRisk >= 60) {
-    setBadge("newsBadge", "HIGH FAKE-NEWS RISK", "bad");
-  } else if (fakeRisk >= 40) {
-    setBadge("newsBadge", "CHECK CREDIBILITY", "purple");
-  } else {
-    setBadge("newsBadge", "LOWER RISK SIGNALS", "good");
-  }
+        document.getElementById("results").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 450);
+}
 
-  if (newsReasons.length === 0) {
-    newsReasons.push("No listed warning patterns were detected in the text.");
-  }
+/*
+ * These are transparent text-pattern checks, not a trained AI model
+ * or an independent fact-checking service.
+ */
 
-  document.getElementById("newsExplanation").textContent =
-    newsReasons.join(" ") +
-    " These are text-based signals, not a factual verification. " +
-    "Compare the claims with reliable independent sources.";
+function analyzeFakeNews(text) {
+    const lower = text.toLowerCase();
 
-  // Clickbait detection uses the SAME input text.
-  let clickRisk = 10;
+    const patterns = [
+        {
+            label: "Unverified certainty",
+            pattern: /\b(100% confirmed|undeniably true|without any doubt|guaranteed truth)\b/i,
+            points: 19
+        },
+        {
+            label: "Urgent sharing",
+            pattern: /\b(share immediately|forward to everyone|share before deleted|spread this now)\b/i,
+            points: 18
+        },
+        {
+            label: "Conspiracy language",
+            pattern: /\b(they don't want you to know|hidden truth|cover[- ]?up|mainstream media is hiding)\b/i,
+            points: 16
+        },
+        {
+            label: "Unsupported authority",
+            pattern: /\b(experts are hiding|scientists don't want|officials secretly admitted)\b/i,
+            points: 13
+        },
+        {
+            label: "Unspecified sources",
+            pattern: /\b(sources say|people are saying|reports claim|someone revealed)\b/i,
+            points: 9
+        },
+        {
+            label: "Miracle claim",
+            pattern: /\b(miracle cure|cures every disease|instant cure|works 100% of the time)\b/i,
+            points: 16
+        },
+        {
+            label: "Absolute language",
+            pattern: /\b(always|never|everyone knows|nobody can deny)\b/i,
+            points: 5
+        },
+        {
+            label: "Unverified breaking claim",
+            pattern: /\b(shocking revelation|secretly confirmed|undisclosed discovery)\b/i,
+            points: 8
+        }
+    ];
 
-  const clickbaitPhrases = [
-    "you won't believe",
-    "you will not believe",
-    "what happened next",
-    "shocking truth",
-    "secret revealed",
-    "will blow your mind",
-    "doctors hate",
-    "they don't want you to know",
-    "one weird trick",
-    "must see",
-    "gone wrong",
-    "change your life",
-    "you need to see",
-    "mind-blowing",
-    "unbelievable",
-    "this is why",
-    "exposed",
-    "insane discovery",
-    "the shocking truth"
-  ];
+    let score = 8;
+    let signals = [];
 
-  for (const phrase of clickbaitPhrases) {
-    if (t.includes(phrase)) {
-      clickRisk += 14;
-      clickReasons.push("Clickbait-style phrase: \"" + phrase + "\".");
+    for (const item of patterns) {
+        if (item.pattern.test(lower)) {
+            score += item.points;
+            signals.push(item.label);
+        }
     }
-  }
 
-  const exclamations = (text.match(/!/g) || []).length;
-  const questions = (text.match(/\?/g) || []).length;
+    const exclamationCount = (text.match(/!/g) || []).length;
+    const uppercaseWords = (text.match(/\b[A-Z]{4,}\b/g) || []).length;
 
-  if (exclamations >= 2) {
-    clickRisk += 10;
-    clickReasons.push("Repeated exclamation marks may be used to attract attention.");
-  }
+    if (exclamationCount >= 3) {
+        score += 7;
+        signals.push("Excessive exclamation marks");
+    }
 
-  if (questions >= 2) {
-    clickRisk += 7;
-    clickReasons.push("Multiple question marks may be used to create curiosity.");
-  }
+    if (uppercaseWords >= 3) {
+        score += 6;
+        signals.push("Excessive uppercase words");
+    }
 
-  const capitalWords = text.match(/\b[A-Z]{3,}\b/g) || [];
+    score = Math.min(score, 96);
 
-  if (capitalWords.length >= 2) {
-    clickRisk += 10;
-    clickReasons.push("Multiple all-capital words emphasize the message.");
-  }
+    let verdict;
+    let explanation;
 
-  if (/\b(shocking|amazing|incredible|secret|insane|unbelievable)\b/i.test(text)) {
-    clickRisk += 8;
-    clickReasons.push("Emotionally charged words appear in the content.");
-  }
+    if (score >= 60) {
+        verdict = "HIGH PATTERN CONCERN";
+        explanation =
+            "Several language patterns commonly associated with misleading " +
+            "or sensational claims were detected. Check the original source, " +
+            "supporting evidence and independent reporting before trusting it.";
+    } else if (score >= 30) {
+        verdict = "SOME WARNING SIGNALS";
+        explanation =
+            "Some potentially concerning language patterns were found. " +
+            "That does not establish that the story is false. Look for " +
+            "verifiable evidence, named sources and corroborating reports.";
+    } else {
+        verdict = "FEW PATTERNS DETECTED";
+        explanation =
+            "Few of the suspicious language patterns checked by this tool " +
+            "were detected. This is not proof of accuracy: false claims can " +
+            "be written in calm, professional language.";
+    }
 
-  clickRisk = Math.max(5, Math.min(95, clickRisk));
-  const normalScore = 100 - clickRisk;
+    if (signals.length === 0) {
+        signals.push("No listed warning pattern matched");
+    }
 
-  setScore("normalValue", "normalBar", normalScore);
-  setScore("clickValue", "clickBar", clickRisk);
+    return { score, verdict, explanation, signals };
+}
 
-  if (clickRisk >= 55) {
-    setBadge("clickBadge", "CLICKBAIT SIGNALS DETECTED", "bad");
-  } else {
-    setBadge("clickBadge", "FEWER CLICKBAIT SIGNALS", "good");
-  }
+function analyzeClickbait(text) {
+    const lower = text.toLowerCase();
 
-  if (clickReasons.length === 0) {
-    clickReasons.push("Few of the clickbait patterns checked by this tool were found.");
-  }
+    const patterns = [
+        {
+            label: "Curiosity gap",
+            pattern: /\b(you won't believe|what happened next|the reason why|here's what happened|this is what happened)\b/i,
+            points: 23
+        },
+        {
+            label: "Secret or revelation",
+            pattern: /\b(secret|revealed|exposed|uncovered|hidden truth|finally revealed)\b/i,
+            points: 15
+        },
+        {
+            label: "Over-the-top reaction",
+            pattern: /\b(shocking|unbelievable|mind[- ]blowing|insane|jaw[- ]dropping|incredible)\b/i,
+            points: 13
+        },
+        {
+            label: "Exaggerated urgency",
+            pattern: /\b(you need to see|must see|don't miss|before it's too late|right now)\b/i,
+            points: 14
+        },
+        {
+            label: "Teasing headline",
+            pattern: /\b(this one trick|the real reason|what they found|number \w+ will surprise you)\b/i,
+            points: 19
+        },
+        {
+            label: "Exaggerated superlatives",
+            pattern: /\b(best ever|worst ever|most shocking|greatest ever|number one secret)\b/i,
+            points: 11
+        },
+        {
+            label: "Direct attention hook",
+            pattern: /\b(look what|watch this|wait until you see|you won't expect)\b/i,
+            points: 12
+        }
+    ];
 
-  document.getElementById("clickExplanation").textContent =
-    clickReasons.join(" ") +
-    " These results concern wording and presentation, not whether the story itself is true.";
+    let score = 5;
+    let signals = [];
 
-  document.getElementById("results").style.display = "block";
+    for (const item of patterns) {
+        if (item.pattern.test(lower)) {
+            score += item.points;
+            signals.push(item.label);
+        }
+    }
 
-  document.getElementById("results").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+    const questionMarks = (text.match(/\?/g) || []).length;
+    const exclamations = (text.match(/!/g) || []).length;
+
+    if (questionMarks >= 2) {
+        score += 7;
+        signals.push("Repeated question hooks");
+    }
+
+    if (exclamations >= 2) {
+        score += 8;
+        signals.push("Excessive excitement punctuation");
+    }
+
+    score = Math.min(score, 97);
+
+    let verdict;
+    let explanation;
+
+    if (score >= 55) {
+        verdict = "STRONG CLICKBAIT SIGNALS";
+        explanation =
+            "The text uses multiple attention-grabbing or curiosity-driven " +
+            "patterns often found in clickbait. Compare the headline with " +
+            "the article itself to see whether it accurately represents the facts.";
+    } else if (score >= 28) {
+        verdict = "SOME CLICKBAIT SIGNALS";
+        explanation =
+            "Some sensational or attention-seeking phrasing was detected. " +
+            "Consider whether the wording exaggerates the story or withholds " +
+            "important information to encourage clicks.";
+    } else {
+        verdict = "FEW CLICKBAIT SIGNALS";
+        explanation =
+            "Few of the clickbait patterns checked by this tool were found. " +
+            "A headline can still be misleading without using these phrases.";
+    }
+
+    if (signals.length === 0) {
+        signals.push("No listed clickbait pattern matched");
+    }
+
+    return { score, verdict, explanation, signals };
+}
+
+function showResult(type, score, verdict, explanation, signals) {
+    document.getElementById(type + "Score").innerHTML =
+        score + "<small>%</small>";
+
+    document.getElementById(type + "Bar").style.width = score + "%";
+
+    document.getElementById(type + "Verdict").textContent = verdict;
+    document.getElementById(type + "Explanation").textContent = explanation;
+
+    const signalBox = document.getElementById(type + "Signals");
+    signalBox.replaceChildren();
+
+    for (const signal of signals) {
+        const tag = document.createElement("span");
+        tag.className = "signal-tag";
+        tag.textContent = signal;
+        signalBox.appendChild(tag);
+    }
+}
+
+function makeSummary(fake, click) {
+    let message = "";
+
+    if (fake.score >= 60 && click.score >= 55) {
+        message =
+            "This text contains several suspicious language patterns and " +
+            "strong attention-grabbing signals. Treat it cautiously and " +
+            "look for independent confirmation.";
+    } else if (fake.score >= 60) {
+        message =
+            "The text contains multiple suspicious language patterns. " +
+            "Clickbait signals are less prominent, but the underlying " +
+            "claims still need independent verification.";
+    } else if (click.score >= 55) {
+        message =
+            "The text contains strong clickbait-style patterns. This " +
+            "concerns its presentation, not necessarily the truth of its claims.";
+    } else if (fake.score >= 30 || click.score >= 28) {
+        message =
+            "Some warning patterns were detected. Read the original article, " +
+            "check its sources and compare the claims with reliable reporting.";
+    } else {
+        message =
+            "Few of the checked warning patterns were detected. Do not " +
+            "interpret this result as confirmation that the news is true.";
+    }
+
+    return message +
+        " These scores are heuristic text-pattern indicators, not " +
+        "fact-checking results or calibrated probabilities.";
 }
 </script>
 
