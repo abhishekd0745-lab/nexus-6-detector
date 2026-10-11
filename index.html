@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS 6 | AI News Detector</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#080d1b;color:#eef3ff}
+header{padding:24px 8%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #24304b}
+.logo{font-size:25px;font-weight:bold;color:#63e6ff;letter-spacing:3px}
+.badge{font-size:12px;color:#8fffd1;border:1px solid #287b68;padding:8px 12px;border-radius:20px}
+main{max-width:1000px;margin:55px auto;padding:20px}
+.hero{text-align:center;margin-bottom:40px}
+.hero h1{font-size:clamp(32px,5vw,55px);margin:15px 0}
+.hero h1 span{color:#63e6ff}
+.hero p{color:#a9b5d0;line-height:1.7}
+.card{background:#111a2e;border:1px solid #293754;border-radius:20px;padding:28px;box-shadow:0 20px 60px #0005}
+label{display:block;font-weight:bold;margin-bottom:12px}
+textarea{width:100%;min-height:180px;background:#080f20;color:white;border:1px solid #344461;border-radius:12px;padding:16px;font-size:16px;resize:vertical;outline:none}
+textarea:focus{border-color:#63e6ff}
+button{background:linear-gradient(90deg,#42cfff,#65f0c1);border:0;border-radius:10px;padding:15px 22px;font-weight:bold;font-size:15px;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:15px}
+.secondary{background:#202b43;color:#fff}
+.note{font-size:12px;color:#9aa8c3;line-height:1.6}
+#result{display:none;margin-top:25px}
+.resulttop{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;align-items:center}
+.status{font-size:23px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:22px 0}
+.metric{background:#0a1224;border:1px solid #293754;padding:18px;border-radius:12px}
+.metric strong{display:block;font-size:30px;margin:10px 0}
+.bar{height:8px;background:#293754;border-radius:10px;overflow:hidden}
+.fill{height:100%;width:0%;transition:width .5s}
+.real{background:#5ce6b2}.fake{background:#ff7185}
+h3{margin-top:22px}
+.explanation{color:#c1cce0;line-height:1.8;white-space:pre-line}
+footer{text-align:center;padding:30px;color:#8592ac;font-size:12px}
+@media(max-width:600px){header{padding:20px;gap:10px}main{margin:20px auto;padding:14px}.card{padding:18px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">NEXUS 6</div>
+<div class="badge">AI NEWS ANALYSIS</div>
+</header>
+<main>
+<section class="hero">
+<div style="color:#63e6ff;letter-spacing:4px;font-size:12px">INTELLIGENCE • VERIFICATION • TRUST</div>
+<h1>Truth deserves <span>to be known.</span></h1>
+<p>Analyze news text, explore credibility signals, and understand why a claim may need further verification.</p>
+</section>
+<section class="card">
+<label for="news">PASTE YOUR NEWS ARTICLE</label>
+<textarea id="news" placeholder="Paste a news headline or article here..."></textarea>
+<div class="actions">
+<button id="analyze" onclick="analyzeNews()">Analyze News →</button>
+<button class="secondary" onclick="clearAll()">Clear</button>
+</div>
+<p class="note">Prototype notice: this demo uses simple text signals, not a trained AI model or live fact-checking database. Results are estimates, not proof of truth or falsehood.</p>
+<section id="result">
+<hr style="border:0;border-top:1px solid #293754;margin:25px 0">
+<div class="resulttop"><div class="status" id="status">Analysis complete</div><div class="badge">DEMO ANALYSIS</div></div>
+<p class="note" id="summary"></p>
+<div class="grid">
+<div class="metric"><span>REAL-LIKE SIGNALS</span><strong id="realPct" style="color:#5ce6b2">0%</strong><div class="bar"><div class="fill real" id="realBar"></div></div></div>
+<div class="metric"><span>FAKE-LIKE SIGNALS</span><strong id="fakePct" style="color:#ff7185">0%</strong><div class="bar"><div class="fill fake" id="fakeBar"></div></div></div>
+</div>
+<h3>🤖 Explanation</h3>
+<p class="explanation" id="explanation"></p>
+<h3>🔎 What to check next</h3>
+<p class="explanation" id="checks"></p>
+</section>
+</section>
+</main>
+<footer>© 2026 NEXUS 6 · AI Fake News Detection Prototype · Verify important claims with reliable sources.</footer>
+<script>
+function analyzeNews(){
+const text=document.getElementById('news').value.trim();
+if(text.length<20){alert('Please paste a headline or article with at least 20 characters.');return;}
+const words=text.toLowerCase();
+let suspicious=0, credible=0;
+const redFlags=[
+{re:/\b(shocking|unbelievable|secret exposed|you won't believe|wake up|miracle cure)\b/g,w:2,why:'Sensational or emotionally charged wording'},
+{re:/\b(share immediately|forward this|they don't want you to know|100% guaranteed)\b/g,w:3,why:'Pressure to share or absolute claims'},
+{re:/!{2,}|\?{2,}/g,w:1,why:'Repeated punctuation'},
+{re:/\b(always|never|everyone knows|proof that|undeniable)\b/g,w:1,why:'Overly absolute language'}
+];
+const goodSignals=[
+{re:/\b(according to|published by|study|researchers|data shows|report states)\b/g,w:1,why:'References to reports, research, or attribution'},
+{re:/\b(on monday|on tuesday|on wednesday|on thursday|on friday|in 202[0-9])\b/g,w:1,why:'Some time or date context'},
+{re:/https?:\/\/\S+/g,w:1,why:'A link is included for further checking'}
+];
+let redFound=[],greenFound=[];
+redFlags.forEach(x=>{if(x.re.test(words)){suspicious+=x.w;redFound.push(x.why)}});
+goodSignals.forEach(x=>{if(x.re.test(words)){credible+=x.w;greenFound.push(x.why)}});
+if(text.length<80)suspicious++;
+const score=Math.max(15,Math.min(85,Math.round(50+(suspicious-credible)*8)));
+const real=100-score, fake=score;
+document.getElementById('realPct').textContent=real+'%';
+document.getElementById('fakePct').textContent=fake+'%';
+document.getElementById('realBar').style.width=real+'%';
+document.getElementById('fakeBar').style.width=fake+'%';
+document.getElementById('status').textContent='Preliminary text assessment';
+document.getElementById('summary').textContent='These numbers represent a simple demo score, not the probability that the article is true or false.';
+let findings=[];
+if(redFound.length)findings.push('Caution signals: '+redFound.join('; ')+'.');
+if(greenFound.length)findings.push('Potentially useful signals: '+greenFound.join('; ')+'.');
+if(!findings.length)findings.push('No specific wording signals were detected by this basic demo.');
+document.getElementById('explanation').textContent=findings.join('\n\n')+'\n\nImportant: writing style alone cannot establish whether a news claim is true. This prototype has not checked the story against independent sources.';
+document.getElementById('checks').textContent='1. Find the original source and publication date.\n2. Look for independent reporting from reputable news organizations.\n3. Check official documents or primary sources for the central claim.\n4. Verify any photos, quotes, names, and statistics.\n5. Do not share the story as fact until it is corroborated.';
+document.getElementById('result').style.display='block';
+document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function clearAll(){
+document.getElementById('news').value='';
+document.getElementById('result').style.display='none';
+}
+</script>
+</body>
+</html>
